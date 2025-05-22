@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import Joke from "../components/Joke";
 
 function App() {
   const [data, setData] = useState([]);
-  const [jokesData, setJokesData] = useState({});
+  const [jokesData, setJokesData] = useState([]);
 
   useEffect(() => {
     async function getJokes() {
@@ -35,8 +36,9 @@ function App() {
         return jokesWithType;
       }, {});
 
-      console.log(result);
-      setJokesData(result);
+      const jokesArray = Object.entries(result);
+      console.log(jokesArray);
+      setJokesData(jokesArray);
     }
 
     setJokes();
@@ -46,23 +48,14 @@ function App() {
     <>
       <section>
         <h1>JOKES</h1>
-        {Object.entries(jokesData).map(([type, jokesArray]) => {
-          return (
-            <div key={type}>
-              <h2>{type.toUpperCase()}</h2>
-              {jokesArray.map((joke) => {
-                return (
-                  <>
-                    <p>
-                      <strong>{joke.setup}</strong>
-                    </p>
-                    <p>{joke.punchline}</p>
-                  </>
-                );
-              })}
-            </div>
-          );
-        })}
+        {jokesData.map(([type, jokesArray]) => (
+          <div key={type}>
+            <h2>{type.toUpperCase()}</h2>
+            {jokesArray.map((joke) => (
+              <Joke jokeItem={joke} key={joke.id} />
+            ))}
+          </div>
+        ))}
       </section>
     </>
   );
